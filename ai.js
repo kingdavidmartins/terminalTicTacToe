@@ -49,56 +49,57 @@ let youWin = (letter) =>
         .reduce((a, b) => a + b))
     .indexOf(0);
 
+let filterState = () =>
+  winArr
+    .filter((value, index, arr) =>
+      [ gameState[value[0] - 1] , gameState[value[1] - 1] , gameState[value[2] - 1] ].indexOf(' ') !== -1);
+
 let aiMove = () =>
   gameState[
-  (gameState[4] === ' ')
-  ? 4
-  : ( winArr
-  .filter((value, index, arr) =>
-    [ gameState[value[0] - 1] , gameState[value[1] - 1] , gameState[value[2] - 1] ].indexOf(' ') !== -1)
-  [winChecker('x', 1)] !== undefined )
-    ? winArr
-    .filter((value, index, arr) =>
-      [ gameState[value[0] - 1] , gameState[value[1] - 1] , gameState[value[2] - 1] ].indexOf(' ') !== -1)
-    [winChecker('x', 1)][
-      winArr
-        .filter((value, index, arr) =>
-          [ gameState[value[0] - 1] , gameState[value[1] - 1] , gameState[value[2] - 1] ].indexOf(' ') !== -1)
-        .map((array, index) =>
-          array
-            .map((value) =>
-              ( letterChecker('x').indexOf(value) !== -1 || letterChecker('o').indexOf(value) !== -1)
-                ? 0
-                : 1))[winChecker('x', 1)].map((value, index) =>
-                  (value === 1)
-                    ? index
-                    : false)
-            .filter(x => x !== false)
-    ] - 1
-    : ( winArr[winChecker('x', 1)] === undefined
-      &&
-      winArr
-        .map((array) =>
-          array
-            .map((value) =>
-              ( letterChecker('x').indexOf(value) !== -1  )
-                ? 0
-                : 1))[winChecker('x', 1)] === undefined)
-
-      ? gameState.indexOf(' ')
-      : winArr[winChecker('x', 1)][
-        winArr
-          .map((array, index) =>
-            array
-              .map((value) =>
-                ( letterChecker('x').indexOf(value) !== -1  )
-                  ? 0
-                  : 1))[winChecker('x', 1)].map((value, index) =>
+    (gameState[4] === ' ')
+      ? 4
+      : ( filterState()[winChecker('x', 1)] !== undefined )
+          ? filterState()[winChecker('x', 1)][
+              filterState()
+                .map((array, index) =>
+                  array
+                    .map((value) =>
+                      ( letterChecker('x').indexOf(value) !== -1 || letterChecker('o').indexOf(value) !== -1)
+                        ? 0
+                        : 1))
+                [winChecker('x', 1)]
+                  .map((value, index) =>
                     (value === 1)
                       ? index
                       : false)
-              .filter(x => x !== false)
-      ] - 1
+                  .filter(x => x !== false)
+            ] - 1
+          : ( winArr[winChecker('x', 1)] === undefined
+              &&
+              winArr
+                .map((array) =>
+                  array
+                    .map((value) =>
+                      ( letterChecker('x').indexOf(value) !== -1  )
+                        ? 0
+                        : 1))
+                [winChecker('x', 1)] === undefined)
+              ? gameState.indexOf(' ')
+              : winArr[winChecker('x', 1)][
+                  winArr
+                    .map((array, index) =>
+                      array
+                        .map((value) =>
+                          ( letterChecker('x').indexOf(value) !== -1  )
+                            ? 0
+                            : 1))
+                    [winChecker('x', 1)]
+                      .map((value, index) =>
+                        (value === 1)
+                          ? index
+                          : false)
+                      .filter(x => x !== false)
+                ] - 1
   ] = 'o';
 
 function logState() {
